@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: exam3
+spec:
+  ports:
+    - port: 5000
+      protocol: TCP
+  selector:
+    app: back-service
+  type: ClusterIP
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployement
+  namespace: exam3
+  labels:
+    app: back-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: back-service
+  template:
+    metadata:
+      labels:
+        app: back-service
+    spec:
+      containers:
+        - name: backend
+          image: khouloudtaou/backend:app-back
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5000
+              name: backend-port
+          env: 
+          - name: PORT
+            value: "5000"
+          - name: CONN_STR
+            value: mongodb+srv://khouloud:<password>@cluster0.pfy2fzd.mongodb.net/?retryWrites=true&w=majority

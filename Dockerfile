@@ -1,7 +1,7 @@
-FROM node:16-alpine
-ENV MONGO_DB_USERNAME=admin \
-MONGO_DB_PWD=password
-
-RUN mkdir -p /home/app
-COPY . /home/app
+FROM node:16-alpine3.16
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 5000
 CMD ["node", "server.js"]
